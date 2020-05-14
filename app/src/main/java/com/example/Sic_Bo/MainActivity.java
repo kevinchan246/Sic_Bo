@@ -1,4 +1,4 @@
-package com.example.diceout;
+package com.example.Sic_Bo;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -32,19 +32,21 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
 
-    TextView rollResult;    //Field to hold the rol result text
+    TextView rollResult;        //Field to hold the rol result text
 
-    int score;              //Field to hold the score
-    int die1, die2, die3;   //Field to hold dice values
-    int coins;              //Field to hold coin number
-    int betAmount;          //Field to hold bet amount
-    boolean betState = false;       //Field to hold the state of bet
-    boolean small = false;  //Field to hold the small boolean
-    boolean guessSmall = false; // field to hold the guess of player
-    Random rand;            //Field for simulating dice
-    TextView scoreText;     //Field to hold the score text
-    TextView coinsText;     //Field to hold the coin text
-    TextView betAmountText; //Field to hold the bet amount text
+    int score;                  //Field to hold the score
+    int die1, die2, die3;       //Field to hold dice values
+    int coins;                  //Field to hold coin number
+    int tempCoins;              //Field to hold a temp coin number for the process of showing the right coins number while changing bet amount
+    int betAmount;              //Field to hold bet amount
+    double winMultiplier;       //Field to hold the win reward multiplier
+    boolean small = false;      //Field to hold the small boolean
+    boolean guessSmall = false; //Field to hold the guess of player
+    boolean win = true;         //Field to hold the game result (win or lose//)
+    boolean enoughCoins = true; //Field to hold the boolean value of enough coins
+    Random rand;                //Field for simulating dice
+    TextView coinsText;         //Field to hold the coin text
+    TextView betAmountText;     //Field to hold the bet amount text
 
     //ArrayList to hold all three dice values
     ArrayList<Integer> dice;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private PopupWindow betPopUp;
     private RelativeLayout betPopUpLayout;
 
-    Button bet100;
+
 
     AppCompatRadioButton rbSmall, rbLarge; //fields for holding the "small" & "large" button
 
@@ -73,18 +75,29 @@ public class MainActivity extends AppCompatActivity {
         greetingMsg.show();
 
         // Get the application context
-        mContext = getApplicationContext();
 
         //roll button logic
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                coins = tempCoins; // confirm and set the real coins number after the roll button is click
                 rollDice(view);
+                if (win){
+                    //if player win the round, rewards the coins and reset the betAmount
+                    coins += betAmount*winMultiplier;
+                    coinsText.setText(""+ coins);
+                    betAmount = 0;
+                    betAmountText.setText("Bet amount:" + betAmount);
+                }else{
+                    //if player lost, just show the remaining coins and reset the betAmount
+                    coinsText.setText(""+ coins);
+                    betAmount = 0;
+                    betAmountText.setText("Bet amount:" + betAmount);
+                }
             }
         });
 
-        betPopUpLayout = (RelativeLayout) findViewById(R.id.content_main);
         //method
         FloatingActionButton bet = (FloatingActionButton) findViewById(R.id.bet);
 
@@ -99,22 +112,21 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialization
         //initializing instances
-        score = 0;
-        coins = 1000;
-        betAmount = 0;
+
         rollResult = (TextView) findViewById(R.id.rollResult);
         coinsText = (TextView) findViewById(R.id.coinsText);
         betAmountText = (TextView) findViewById(R.id.betAmountText);
-
-
-
+        coins = 50;
+        betAmount = 0;
+        betAmountText.setText("Bet: "+betAmount);
+        coinsText.setText(""+coins);
+        coinsText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_attach_money_orange_24dp,0,0,0);
 
         //initialing the new random number
         rand = new Random();
 
         //create array list container for the dice values
         dice = new ArrayList<Integer>();
-
 
         //links to images
         ImageView die1Images = (ImageView) findViewById(R.id.die1Image);
@@ -146,16 +158,17 @@ public class MainActivity extends AppCompatActivity {
         bet100.setEnabled(true);
         close.setEnabled(true);
 
-
-
-
-
         bet100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if the coin is enough
+
+                //show the toaster meg
                 Toast bet100Msg = Toast.makeText(getApplicationContext(), "Bet 100 coins ", Toast.LENGTH_SHORT);
                 bet100Msg.setGravity(Gravity.CENTER,0,0);
                 bet100Msg.show();
+
+                //set the betAmount and coin amount
                 setBetAmount100(v);
                 MyDialog.cancel();
             }
@@ -164,9 +177,14 @@ public class MainActivity extends AppCompatActivity {
         bet200.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if the coin is enough
+
+                //show the toaster meg
                 Toast bet200Msg = Toast.makeText(getApplicationContext(), "Bet 200 coins ", Toast.LENGTH_SHORT);
                 bet200Msg.setGravity(Gravity.CENTER,0,0);
                 bet200Msg.show();
+
+                //set the betAmount and coin amount
                 setBetAmount200(v);
                 MyDialog.cancel();
             }
@@ -175,9 +193,14 @@ public class MainActivity extends AppCompatActivity {
         bet300.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if the coin is enough
+
+                //show the toaster meg
                 Toast bet100Msg = Toast.makeText(getApplicationContext(), "Bet 300 coins ", Toast.LENGTH_SHORT);
                 bet100Msg.setGravity(Gravity.CENTER,0,0);
                 bet100Msg.show();
+
+                //set the betAmount and coin amount
                 setBetAmount300(v);
                 MyDialog.cancel();
             }
@@ -194,31 +217,94 @@ public class MainActivity extends AppCompatActivity {
         MyDialog.show();
     }
 
+    public boolean coinAmountChecker(){
+        Toast coinErrorMsg;
+        String msg;
+        if (coins<=0){
+            enoughCoins = false;
+            msg = "You don't coins! Please add some coins";
+            coinErrorMsg = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            coinErrorMsg.setGravity(Gravity.CENTER,0,0);
+            coinErrorMsg.show();
+        }
+        else if (coins < betAmount){
+            enoughCoins = false;
+
+        }
+        else{
+            enoughCoins = true;
+        }
+        return enoughCoins;
+    }
+
+
     public void setBetAmount100(View v) {
         int oneTimeAmount = 100;
-        coinsText.setText("Coin: " + coins);
         betAmount = oneTimeAmount;
-        coins -= oneTimeAmount;
-        coinsText.setText("Coin: " + coins);
-        betAmountText.setText("Bet amount: " + betAmount);
+
+        if (coinAmountChecker()){
+            tempCoins = coins;
+            coinsText.setText("" + coins);  //Show original num of coins
+            winMultiplier = 1.2;
+            tempCoins -= oneTimeAmount;
+            coinsText.setText("" + tempCoins);
+            betAmountText.setText("Bet amount: " + betAmount);
+        }
+        else{
+            Toast coinErrorMsg;
+            String msg;
+            msg = "You don't have enough coins! Please choose the lower bet amount or add some coins";
+            coinErrorMsg = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            coinErrorMsg.setGravity(Gravity.CENTER,0,0);
+            coinErrorMsg.show();
+        }
+
     }
 
     public void setBetAmount200(View v) {
         int oneTimeAmount = 200;
-        coinsText.setText("Coin: " + coins);
         betAmount = oneTimeAmount;
-        coins -= oneTimeAmount;
-        coinsText.setText("Coin: " + coins);
-        betAmountText.setText("Bet amount: " + betAmount);
+
+        if (coinAmountChecker()){
+            tempCoins = coins;
+            coinsText.setText("" + coins);  //Show original num of coins
+            winMultiplier = 1.5;
+
+            tempCoins -= oneTimeAmount;
+            coinsText.setText("" + tempCoins);
+            betAmountText.setText("Bet amount: " + betAmount);
+        }
+        else{
+            Toast coinErrorMsg;
+            String msg;
+            msg = "You don't have enough coins! Please choose the lower bet amount or add some coins";
+            coinErrorMsg = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            coinErrorMsg.setGravity(Gravity.CENTER,0,0);
+            coinErrorMsg.show();
+        }
+
     }
 
     public void setBetAmount300(View v) {
         int oneTimeAmount = 300;
-        coinsText.setText("Coin: " + coins);
         betAmount = oneTimeAmount;
-        coins -= oneTimeAmount;
-        coinsText.setText("Coin: " + coins);
-        betAmountText.setText("Bet amount: " + betAmount);
+
+        if (coinAmountChecker()){
+            tempCoins = coins;
+            coinsText.setText("" + coins);  //Show original num of coins
+            winMultiplier = 2;
+            tempCoins -= oneTimeAmount;
+            coinsText.setText("" + tempCoins);
+            betAmountText.setText("Bet amount: " + betAmount);
+        }
+        else{
+            Toast coinErrorMsg;
+            String msg;
+            msg = "You don't have enough coins! Please choose the lower bet amount or add some coins";
+            coinErrorMsg = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            coinErrorMsg.setGravity(Gravity.CENTER,0,0);
+            coinErrorMsg.show();
+        }
     }
 
 
@@ -226,6 +312,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void rollDice(View v){
         rollResult.setText("Dice Rolled! To play again, bet first by tapping the lower left 'B', choose you guess then tap the dice button to roll!");
+
+
 
         //generating a random number from 1 to 6;
         die1 = rand.nextInt(6) + 1;
@@ -253,36 +341,24 @@ public class MainActivity extends AppCompatActivity {
         //displaying the result msg
         String msg;
 
-        //set small boolean value according to sum of three dies
+        //set win boolean value according to sum of three dies and the player's guess
         if (sum <= 9){
             small = true;  //result is Small
-            if (guessSmall == small){    //if guessing is small
+            if (guessSmall == small){    //if guessing is correct
                 msg = "You rolled a " + sum + " ! It's Small! You win!";
-                coins += betAmount*1.5;
-                coinsText.setText("Coin: "+ coins);
-                betAmount = 0;
-                betAmountText.setText("Bet amount:" + betAmount);
-            }else{
+                win = true;
+            }else{                      //if guessing is wrong
                 msg = "You rolled a " + sum + " ! It's Small! You lose!";
-
-                coinsText.setText("Coin: "+ coins);
-                betAmount = 0;
-                betAmountText.setText("Bet amount:" + betAmount);
+                win = false;
             }
-
         }else{
             small = false;  //result is Large
-            if (guessSmall == small){    //if guessing is large
+            if (guessSmall == small){    //if guessing is correct
                 msg = "You rolled a " + sum + " ! It's Large! You win!";
-                coins += betAmount*1.5;
-                coinsText.setText("Coin: "+ coins);
-                betAmount = 0;
-                betAmountText.setText("Bet amount:" + betAmount);
-            }else{
+                win = true;
+            }else{                      //if guessing is wrong
                 msg = "You rolled a " + sum + " ! It's Large! You lose!";
-                coinsText.setText("Coin: "+ coins);
-                betAmount = 0;
-                betAmountText.setText("Bet amount:" + betAmount);
+                win = false;
             }
         }
         Toast toastMsg = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);

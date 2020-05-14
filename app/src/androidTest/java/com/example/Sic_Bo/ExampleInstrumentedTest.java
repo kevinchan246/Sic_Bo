@@ -1,4 +1,4 @@
-package com.example.diceout;
+package com.example.Sic_Bo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

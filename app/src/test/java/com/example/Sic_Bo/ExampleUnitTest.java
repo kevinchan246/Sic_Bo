@@ -1,4 +1,4 @@
-package com.example.diceout;
+package com.example.Sic_Bo;
 
 import org.junit.Test;
 

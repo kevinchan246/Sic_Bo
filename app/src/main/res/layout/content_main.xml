@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.diceout.MainActivity"
+    tools:context="com.example.Sic_Bo.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <TextView
@@ -63,9 +63,9 @@
         android:layout_above="@id/die3Image"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="150dp"
-        android:text="Coins: 1000"
+        android:text="coins_here"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#555555"
+        android:textColor="#F44336"
         android:textStyle="bold"
         android:typeface="sans"
         />
@@ -78,9 +78,9 @@
         android:layout_above="@id/die3Image"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="150dp"
-        android:text="Bet Amount: 0"
+        android:text="Bet_amount_here"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#555555"
+        android:textColor="@color/holo_red_light"
         android:textStyle="bold"
         android:typeface="sans"
         />

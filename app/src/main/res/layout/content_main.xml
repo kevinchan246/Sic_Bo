@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.diceout.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <TextView
+        android:id="@+id/rollResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tap the dice icon at the bottom to roll dice!"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+
+    <ImageView
+        android:id="@+id/die1Image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/rollResult"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="0dp"
+        android:src="@drawable/closed_dice"
+        />
+
+    <ImageView
+        android:id="@+id/die2Image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/rollResult"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginLeft="0dp"
+        android:src="@drawable/closed_dice"
+        />
+
+    <ImageView
+        android:id="@+id/die3Image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/die2Image"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginLeft="0dp"
+        android:src="@drawable/closed_dice"
+        />
+
+    <TextView
+        android:id="@+id/coinsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/die3Image"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="150dp"
+        android:text="Coins: 1000"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:typeface="sans"
+        />
+
+    <TextView
+        android:id="@+id/betAmountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/die3Image"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="150dp"
+        android:text="Bet Amount: 0"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:typeface="sans"
+        />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rbSmall"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:textColor="@android:color/white"
+            android:text="Small"
+            android:textSize="20dp"
+            android:checked="true"
+            android:button="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginTop="400dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_small_selector"
+            android:onClick="onRadioButtonClicked"
+            />
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rbLarge"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:textColor="@android:color/holo_red_light"
+            android:text="Large"
+            android:checked="false"
+            android:textSize="20dp"
+            android:button="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginTop="400dp"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_large_selector"
+            android:onClick="onRadioButtonClicked"
+            />
+    </RadioGroup>
+</RelativeLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/betPopUpRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:background="#FBFFFFFF"
+    tools:context="com.example.diceout.MainActivity"
+    tools:showIn="@layout/activity_main"
+    >
+
+    <ImageButton
+        android:id="@+id/betPopUpCloseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/outline_close_black_18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        />
+
+
+    <TextView
+        android:id="@+id/betTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Choose Bet Amount"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:layout_centerInParent="true"
+        android:padding="25sp"
+        />
+
+
+    <Button
+        android:id="@+id/bet_100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/betTextView"
+        android:layout_marginStart="10dp"
+        android:text="100 coins"
+        android:layout_marginLeft="10dp" />
+
+    <Button
+        android:id="@+id/bet_200"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/betTextView"
+        android:layout_toRightOf="@id/bet_100"
+        android:text="200 coins"
+        />
+
+    <Button
+        android:id="@+id/bet_300"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/betTextView"
+        android:layout_toRightOf="@id/bet_200"
+        android:text="300 coins"
+        />
+
+
+
+
+</RelativeLayout>
